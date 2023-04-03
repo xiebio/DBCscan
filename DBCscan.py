@@ -6,6 +6,7 @@ def parse_config (config_file):
             'protista_db':'',
             'non_protista_db':'',
             'nt_db':'',
+            'nt_taxonomy':'',
             'krona_path':'',
             }
     with open (config_file) as fh:
@@ -13,7 +14,10 @@ def parse_config (config_file):
             line = line.strip()
             name,path = line.split('=')
             if name in parameters_dict:
-                parameters_dict[name] = os.path.abspath(path)
+                if os.path.isabs(path):
+                    parameters_dict[name] = path
+                else:
+                    parameters_dict[name] = os.path.join(config_dir,path)
     return parameters_dict
 
 def usage():
@@ -53,6 +57,7 @@ if not assembly:
     usage()
     sys.exit(2)
 
+config_dir = os.path.dirname(config_file)
 parameters_dict = parse_config(config_file)
 outdir_list = [
     outdir,
@@ -61,7 +66,10 @@ outdir_list = [
     outdir+'/1.Protista_m6',
     outdir+'/2.Non_Protista_m6',
     outdir+'/2.Protista_choped_fas',
-    outdir+'/3.NT_m6'
+    outdir+'/3.NT_m6',
+    outdir+'/4.Protist_fas',
+    outdir+'/4.Protista_m6',
+    outdir+'/5.Krona'
         ]
 for i in outdir_list:
     if not os.path.exists(i):os.mkdir(i)
@@ -79,7 +87,11 @@ if [ -f "{0}/1.Protista_fas/{1}" ]; then
 fi
 if [ -f "{0}/2.Protista_choped_fas/{1}" ]; then
     blastn -outfmt '6 std staxid stitle' -query {0}/2.Protista_choped_fas/{1} -db {7} -out {0}/3.NT_m6/{1}.m6 -evalue 1e-5
+    python {6}/lib/nt_m6_extract.py {8} {0}/2.Protista_choped_fas/{1} {0}/3.NT_m6/{1}.m6 {0}/4.Protista_m6/{1}.m6 {0}/4.Protist_fas/{1} {0}/5.Krona/{1} 
+fi
+if [ -f "{0}/5.Krona/{1}" ]; then
+    ktImportTaxonomy -o {0}/5.Krona/{1}.html {0}/5.Krona/{1}
 fi
 echo {1} done
-'''.format(outdir, prefix, assembly, parameters_dict['protista_db'], parameters_dict['non_protista_db'], chop, program_dir, parameters_dict['nt_db'] ))
+'''.format(outdir, prefix, assembly, parameters_dict['protista_db'], parameters_dict['non_protista_db'], chop, program_dir, parameters_dict['nt_db'], parameters_dict['nt_taxonomy'] ))
 os.system("sh {}/run_DBCscan.sh".format(outdir))
