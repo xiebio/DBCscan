@@ -27,6 +27,9 @@ def usage():
     print("Usage: DBCscan.py -h help -a config_file -i input_assembly -o out_dir -c")
     print("-c if defined, the contigs longer than 100000 will be discarded at first")
     print("-o --out_dir outdir[default:./]")
+    print('''###set parameter -c on can greatly reduce the time and memery used when applied to very large dataset, 
+    ###while almost does not affect the final results, as most of the contaminated contigs are less than 100,000 bp, 
+    ###especially for protistan mitochondrial sequences.''')
 
 if __name__ == "__main__":
     try:
