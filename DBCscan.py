@@ -28,7 +28,7 @@ def usage():
     print("-c if defined, the contigs longer than 100000 will be discarded at first")
     print("-o --out_dir outdir[default:./]")
     print('''###set parameter -c on can greatly reduce the time and memery used when applied to very large dataset, 
-###while almost does not affect the final results, as most of the protist contaminated contigs are less than 100,000 bp''')
+###with little affects on the final results, as most of the protist contaminated contigs are less than 100,000 bp''')
 
 if __name__ == "__main__":
     try:
