@@ -1,3 +1,7 @@
+"""
+Author: Jiazheng Xie.
+Github: https://github.com/xiebio
+"""
 import getopt
 import sys
 import os
