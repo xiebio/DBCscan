@@ -1,3 +1,7 @@
+"""
+Author: Jiazheng Xie.
+Github: https://github.com/xiebio
+"""
 import re
 class taxid:
 
